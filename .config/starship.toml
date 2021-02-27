@@ -1,0 +1,73 @@
+[battery]
+disabled = true
+
+[character]
+error_symbol = "[✖](bold red) "
+
+[cmd_duration]
+min_time = 5_000  # Show command duration over 5,000 milliseconds (=5 sec)
+format = "took [$duration]($style)"
+
+[directory]
+truncation_length = 5
+format = "[$path]($style)[$lock_symbol]($lock_style) "
+
+[git_branch]
+style = "bold yellow"
+
+[git_commit]
+commit_hash_length = 8
+style = "bold white"
+
+[git_state]
+progress_divider = " of "
+
+[git_status]
+style = "bright-white"
+format = "$all_status$ahead_behind"
+
+[hostname]
+ssh_only = false
+format = "<[$hostname]($style)>"
+trim_at = "-"
+style = "bold dimmed white"
+disabled = true
+
+[memory_usage]
+disabled = true
+show_percentage = true
+show_swap = true
+threshold = -1
+symbol = ""
+separator = "/"
+style = "bold dimmed green"
+
+[package]
+disabled = true
+
+[python]
+disabled = true
+
+[perl]
+disabled = true
+
+[julia]
+disabled = true
+
+[time]
+time_format = "%a %e %h %R"
+format = "$time($style) "
+style = "bright-white"
+disabled = false
+
+[username]
+style_user = "bold dimmed blue"
+show_always = true
+
+[conda]
+format = " [$symbol$environment](dimmed green) "
+ignore_base = false
+disabled = false
+
+
+
