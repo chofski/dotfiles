@@ -110,7 +110,7 @@ endif
 syntax enable
 
 colorscheme base16-tomorrow-night
-set colorcolumn=80
+set colorcolumn=81
 let macvim_skip_colorscheme = 1
 
 " set indent guides
