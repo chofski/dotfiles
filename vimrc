@@ -122,7 +122,7 @@ let macvim_skip_colorscheme = 1
 " let g:indent_guides_guide_size = 1
 
 " set airline theme
-let g:airline_theme = '16color'
+" let g:airline_theme = '16color'
 
 " Tab sanity
 set expandtab
