@@ -8,5 +8,6 @@ rm ~/.gitconfig
 rm ~/.viminfo
 rm ~/.vimrc
 rm ~/.zshrc
+rm ~/.tmux.conf
 rm ~/.zsh_history
 rm ~/.zcompdump
