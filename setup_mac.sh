@@ -27,10 +27,12 @@ echo "base16_classic-dark" >> ~/.zshrc
 echo "" >> ~/.zshrc
 
 ###############################################################################
-# Setup vim (this installs needed plugins)
+# Setup git
 cp ./dotfiles/gitconfig ~/.gitconfig
 # Setup vim (this installs needed plugins)
 cp ./dotfiles/vimrc ~/.vimrc
+# Setup tmux
+cp ./dotfiles/tmux.conf ~/.tmux.conf
 
 ###############################################################################
 # Install wget (needed for some packages)
