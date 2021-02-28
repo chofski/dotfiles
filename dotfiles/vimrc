@@ -9,6 +9,7 @@ set title
 set number
 set hidden
 set laststatus=2
+set noshowmode
 
 syntax enable   
 set number relativenumber
@@ -82,10 +83,16 @@ Plugin 'tpope/vim-sensible'
 Plugin 'tpope/vim-surround'
 Plugin 'sentientmachine/Pretty-Vim-Python'
 Plugin 'JuliaEditorSupport/julia-vim'
+Plugin 'jpalardy/vim-slime'
+Plugin 'mroavi/vim-julia-cell'
 Plugin 'itchyny/lightline.vim'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'chriskempson/base16-vim'
 Plugin 'scrooloose/nerdtree'
+Plugin 'cespare/vim-toml'
+Plugin 'stephpy/vim-yaml'
+Plugin 'rust-lang/rust.vim'
+
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -97,6 +104,8 @@ if iCanHazVundle == 0
     :PluginInstall
 endif
 " end of vundle setup
+
+let g:yaml_limit_spell = 1
 
 let base16colorspace=256  " Access colors present in 256 colorspace
 
@@ -143,6 +152,43 @@ autocmd Filetype json setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 autocmd FileType make setlocal noexpandtab
 
+
+"------------------------------------------------------------------------------
+" slime configuration 
+"------------------------------------------------------------------------------
+let g:slime_target = 'tmux'
+let g:slime_default_config = {"socket_name": "default", "target_pane": "{right-of}"}
+let g:slime_dont_ask_default = 1
+
+"------------------------------------------------------------------------------
+" julia-cell configuration
+"------------------------------------------------------------------------------
+" Use '##' tags to define cells
+let g:julia_cell_delimit_cells_by = 'tags'
+
+" map <Leader>jr to run entire file
+nnoremap <Leader>jr :JuliaCellRun<CR>
+
+" map <Leader>jc to execute the current cell
+nnoremap <Leader>jc :JuliaCellExecuteCell<CR>
+
+" map <Leader>jC to execute the current cell and jump to the next cell
+nnoremap <Leader>jC :JuliaCellExecuteCellJump<CR>
+
+" map <Leader>jl to clear Julia screen
+nnoremap <Leader>jl :JuliaCellClear<CR>
+
+" map <Leader>jp and <Leader>jn to jump to the previous and next cell header
+nnoremap <Leader>jp :JuliaCellPrevCell<CR>
+nnoremap <Leader>jn :JuliaCellNextCell<CR>
+
+" map <Leader>je to execute the current line or current selection
+nmap <Leader>je <Plug>SlimeLineSend
+xmap <Leader>je <Plug>SlimeRegionSend
+
+" map <F5> to save and run script
+nnoremap <F5> :w<CR>:JuliaCellRun<CR>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => NERDTree
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -175,6 +221,8 @@ let g:netrw_liststyle=3     " tree view
 let g:netrw_list_hide=netrw_gitignore#Hide()
 let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
 
+
+autocmd BufRead,BufNewFile *.jl :set filetype=julia
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "Set Vim Language
