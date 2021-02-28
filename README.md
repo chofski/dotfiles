@@ -23,7 +23,7 @@ brew install --cask miniconda
 conda init "$(basename "${SHELL}")"
 brew install --cask julia
 brew install --cask iterm2
-brew install macvim
+brew install --cask macvim
 brew install tmux
 brew install samtools
 brew install bedtools
