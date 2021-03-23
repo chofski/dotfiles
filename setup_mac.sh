@@ -1,4 +1,6 @@
 
+xcode-select --install
+
 echo "" >> ~/.zshrc
 echo "#########################################" >> ~/.zshrc
 echo "# AUTOMATICALLY GENERATED CONFIGURATION #" >> ~/.zshrc
