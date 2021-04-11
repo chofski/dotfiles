@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+source "$DIR/utils/index"
+
+info "Update \033[0;37m[macOS]\033[0m"
+
+# update software
+require_sudo
+softwareupdate --install --all --force
+success "Updated software, this might need a reboot"
+
+# update gem files
+require_sudo
+sudo gem update --system > /dev/null 2>&1
+success "Updated gems"
+
+# backup app preferences
+if [ -d "$HOME/.mackup" ]; then
+  mackup backup -f
+  success "App preferences backed-up"
+fi

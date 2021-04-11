@@ -1,25 +1,18 @@
+# setup_mac.sh
+# Expects to be given username for UoB server as first command line argument.
 
+# Install command line tools if not done so already
 xcode-select --install
 
-
-
-brew install luarocks
-
-julia> Pkg.add("LanguageServer")
-julia> Pkg.add("SymbolServer")
-julia> Pkg.add("StaticLint")
-
-Install coc-julia, or register the server in coc-settings.json:
-
-"languageserver": {
-  "julia": {
-    "command": "/usr/bin/julia",
-    "args" : ["--startup-file=no", "--history-file=no", "-e",
-    "using LanguageServer;\n       using Pkg;\n       import StaticLint;\n       import SymbolServer;\n       env_path = dirname(Pkg.Types.Context().env.project_file);\n       debug = false;\n       server = LanguageServer.LanguageServerInstance(stdin, stdout, debug, env_path, \"\");\n       server.runlinter = true;\n       run(server);" ],
-    "filetypes": ["julia"]
-  }
-}
-
+#Install coc-julia, or register the server in coc-settings.json:
+#"languageserver": {
+#  "julia": {
+#    "command": "/usr/bin/julia",
+#    "args" : ["--startup-file=no", "--history-file=no", "-e",
+#    "using LanguageServer;\n       using Pkg;\n       import StaticLint;\n       import SymbolServer;\n       env_path = dirname(Pkg.Types.Context().env.project_file);\n       debug = false;\n       server = LanguageServer.LanguageServerInstance(stdin, stdout, debug, env_path, \"\");\n       server.runlinter = true;\n       run(server);" ],
+#    "filetypes": ["julia"]
+#  }
+#}
 
 echo "" >> ~/.zshrc
 echo "#########################################" >> ~/.zshrc
@@ -28,24 +21,12 @@ echo "#########################################" >> ~/.zshrc
 echo "" >> ~/.zshrc
 
 ###############################################################################
-
+# Standard environment variables
 echo "export PATH=\$HOME/Development/bin:usr/local/bin:/Library/Frameworks/R.framework/Resources/bin:\$PATH" >> ~/.zshrc
 echo "export PYTHONPATH=\"\$HOME/Development/projects/pythonpath\"" >> ~/.zshrc
 echo "export EDITOR='mvim -f --nomru -c \"au VimLeave * !open -a Terminal\"'" >> ~/.zshrc
-echo "export JULIA_NUM_THREADS=6" >> ~/.zshrc
-echo "export UOB_USERNAME=UPDATE" >> ~/.zshrc
-echo "" >> ~/.zshrc
-
-###############################################################################
-# Base16 setup for the shell (ensure iTerm also using a 256 color theme)
-git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
-echo "# Base16 Shell" >> ~/.zshrc
-echo "BASE16_SHELL=\"\$HOME/.config/base16-shell\"" >> ~/.zshrc
-echo "[ -n \"\$PS1\" ] && \\" >> ~/.zshrc
-echo "    [ -s \"\$BASE16_SHELL/profile_helper.sh\" ] && \\" >> ~/.zshrc
-echo "        eval \"\$(\"\$BASE16_SHELL/profile_helper.sh\")\"" >> ~/.zshrc
-echo "# Select the theme" >> ~/.zshrc
-echo "base16_classic-dark" >> ~/.zshrc
+echo "export JULIA_NUM_THREADS=$(expr $(sysctl -n hw.physicalcpu_max) - 2)" >> ~/.zshrc
+echo "export UOB_USERNAME=$1" >> ~/.zshrc
 echo "" >> ~/.zshrc
 
 ###############################################################################
@@ -67,6 +48,10 @@ echo 'eval "$(starship init zsh)"' >> ~/.zshrc
 echo "" >> ~/.zshrc
 mkdir ~/.config
 cp ./dotfiles/config/starship.toml ~/.config/starship.toml
+
+###############################################################################
+# Copy the nvim config
+cp -R ./dotfiles/config/nvim ~/.config/
 
 ###############################################################################
 # Create a `.zsh` directory to store our plugins in one place

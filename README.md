@@ -55,24 +55,7 @@ setup_mac.sh
 
 If an error occurs or you would like to install a fresh configuration, a `clean_mac.sh` script is provided, which removes all customised configuration files.
 
-## 3. NeoVim
-
-To finalise the setup of `nvim` it is necessary to open the application and enter the following commands:
-
-```
-:PackerSync
-:q
-```
-
-Then to start `nvim` again to allow for all the plugins to set themselves up correctly, before running:
-
-```
-:PackerCompile
-```
-
-No errors should be thrown and NeoVim should now be all setup correctly.
-
-## 4. Python environment
+## 3. Python environment
 
 There are a number of commonly used packages that are useful to have in the `base` conda environment to make standard analysis easier. The list currently stands at the following (run each separately to ensure no errors are raised).
 
@@ -89,7 +72,7 @@ conda install ipython
 
 For more complex setups, it is recommended to create a separate conda environment to ensure this one doesn't get screwed up.
 
-## 5. Julia environment
+## 4. Julia environment
 
 As with Python, Julia also has a number of useful packages that are worth installing to reduce issues in running scripts used across the lab. These can be installed by entering a Julia REPL and running the following commands:
 
@@ -102,3 +85,20 @@ Pkg.add("HDF5")
 Pkg.add("DynamicalSystems")
 Pkg.add("Catalyst")
 ```
+
+## 5. NeoVim
+
+To finalise the setup of `nvim` it is necessary to open the application and enter the following commands:
+
+```
+:PackerSync
+:q
+```
+
+Then to start `nvim` again to allow for all the plugins to set themselves up, before finally running the command:
+
+```
+:PackerCompile
+```
+
+No errors should be thrown and NeoVim should now be all setup correctly.
