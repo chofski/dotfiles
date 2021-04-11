@@ -1,0 +1,13 @@
+
+require('config.colorscheme')
+require('config.fugitive')
+require('config.devicon')
+require('config.project')
+require('config.telescope')
+require('config.compe')
+require('config.colorizer')
+require('config.treesitter')
+require('config.nvimtree')
+require('config.galaxyline')
+require('config.julia')
+require('config.bufferline')

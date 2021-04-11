@@ -19,12 +19,20 @@ Once available it is then possible to install the [Homebrew](https://brew.sh) pa
 Once all the necessary compilers and package managers are available most software can be installed using the following commands (run each separately to ensure no errors are raised):
 
 ```
+brew tap homebrew/cask-fonts
+brew install --cask font-juliamono
+brew install --cask font-fira-code-nerd-font
 brew install --cask miniconda
 conda init "$(basename "${SHELL}")"
 brew install --cask julia
+brew install --cask r
+brew install rust
 brew install --cask iterm2
-brew install --cask macvim
+brew install neovim --HEAD
+brew install luarocks
 brew install tmux
+brew install htop
+brew install BpyTOP
 brew install samtools
 brew install bedtools
 brew install blast
@@ -35,9 +43,9 @@ brew install cunit
 brew install youtube-dlc
 ```
 
-At this stage it is also a good idea to install any custom fonts that are required such a [MonoLisa](https://www.monolisa.dev) or a [Nerd font](https://www.nerdfonts.com) if you want additional symbols in your setup.
+At this stage it is also a good idea to install any custom fonts that are not available via Homebrew such a [MonoLisa](https://www.monolisa.dev).
 
-For customisation of the shell and command line tools like `vim` and `tmux` it is necessary to update iTerm2 to use the BCL profile and import the [tomorrow-dark base16 256 colour scheme](https://github.com/chriskempson/base16-iterm2). Once done, the following script can be run to update all config files.
+For customisation of the shell and command line tools like `nvim` and `tmux` it is necessary to update iTerm2 to use the BCL profile and import the [tomorrow-dark base16 256 colour scheme](https://github.com/chriskempson/base16-iterm2). Once done, the following script can be run to update all config files.
 
 ```
 setup_mac.sh
@@ -67,6 +75,11 @@ For more complex setups, it is recommended to create a separate conda environmen
 As with Python, Julia also has a number of useful packages that are worth installing to reduce issues in running scripts used across the lab. These can be installed by entering a Julia REPL and running the following commands:
 
 ```
+using Pkg
+Pkg.add("LanguageServer")
+Pkg.add("SymbolServer")
+Pkg.add("StaticLint")
 Pkg.add("HDF5")
-Pkg.add("HDF5")
+Pkg.add("DynamicalSystems")
+Pkg.add("Catalyst")
 ```
