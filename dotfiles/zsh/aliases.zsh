@@ -8,10 +8,6 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias less='less -R'
 alias g='git'
-
+alias vi='nvim'
 alias mosh_bcl_server='mosh $UOB_USER@137.222.175.76'
-
-alias rm='rm -i'                              # confirm removal
-alias cp='cp -i'                              # confirm copy
-alias mv='mv -i'                              # confirm move
 alias weather='curl wttr.in/bristol'
