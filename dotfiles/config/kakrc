@@ -1,0 +1,167 @@
+
+# Setup plugins
+evaluate-commands %sh{
+    plugins="$kak_config/plugins"
+    mkdir -p "$plugins"
+    [ ! -e "$plugins/plug.kak" ] && \
+        git clone -q https://github.com/andreyorst/plug.kak.git "$plugins/plug.kak"
+    printf "%s\n" "source '$plugins/plug.kak/rc/plug.kak'"
+}
+plug "andreyorst/plug.kak" noload
+
+plug "andreyorst/fzf.kak"
+
+plug 'JJK96/kakoune-repl-send' %{
+  # Suggested mapping
+  map global normal <backspace> ': repl-send<ret>'
+}
+
+plug "raiguard/one.kak" theme
+
+plug "lePerdu/kakboard" %{
+    hook global WinCreate .* %{ kakboard-enable }
+}
+
+plug 'delapouite/kakoune-palette'
+
+# Language Servers
+# ────────────────
+
+# Be sure to install kak-lsp using brew and to create config files in .config
+eval %sh{kak-lsp --kakoune -vvv -c $HOME/.config/kak-lsp/kak-lsp.toml -s $kak_session }
+# --log $HOME/.config/kak-lsp/kak-lsp.log
+hook global WinSetOption filetype=(julia) %{
+    lsp-enable-window
+}
+
+# User preference
+# ───────────────
+
+set-option global makecmd 'make -j8'
+set-option global grepcmd 'ag --column'
+set-option global ui_options terminal_status_on_top=true
+hook global ModuleLoaded clang %{ set-option global clang_options -std=c++17 }
+
+colorscheme one-dark
+
+add-highlighter global/ show-matching
+
+hook global RegisterModified '/' %{ add-highlighter -override global/search regex "%reg{/}" 0:+u }
+
+hook global WinCreate ^[^*]+$ %{ add-highlighter window/ number-lines -hlcursor }
+
+# Enable editor config
+# ────────────────────
+
+hook global BufOpenFile .* %{ editorconfig-load }
+hook global BufNewFile .* %{ editorconfig-load }
+
+# Filetype specific hooks
+# ───────────────────────
+
+hook global WinSetOption filetype=(c|cpp) %{
+    clang-enable-autocomplete 
+    clang-enable-diagnostics
+    alias window lint clang-parse
+    alias window lint-next-error clang-diagnostics-next
+}
+
+hook global WinSetOption filetype=python %{
+    jedi-enable-autocomplete
+    lint-enable
+    set-option global lintcmd 'flake8'
+}
+
+map -docstring "xml tag objet" global object t %{c<lt>([\w.]+)\b[^>]*?(?<lt>!/)>,<lt>/([\w.]+)\b[^>]*?(?<lt>!/)><ret>}
+
+# Highlight the word under the cursor
+# ───────────────────────────────────
+
+set-face global CurWord default,rgba:80808040
+
+hook global NormalIdle .* %{
+    eval -draft %{ try %{
+        exec <space><a-i>w <a-k>\A\w+\z<ret>
+        add-highlighter -override global/curword regex "\b\Q%val{selection}\E\b" 0:CurWord
+    } catch %{
+        add-highlighter -override global/curword group
+    } }
+}
+
+# Custom mappings
+# ───────────────
+
+map global normal = ':prompt math: %{exec "a%val{text}<lt>esc>|bc<lt>ret>"}<ret>'
+
+# Various mappings
+# ────────────────
+
+map global normal '#' :comment-line<ret>
+
+map global user -docstring 'next lint error' n ':lint-next-error<ret>'
+map global normal <c-p> :lint<ret>
+
+map global user -docstring 'gdb helper mode' g ':gdb-helper<ret>'
+map global user -docstring 'gdb helper mode (repeat)' G ':gdb-helper-repeat<ret>'
+
+map global user -docstring 'lsp mode' l ':enter-user-mode lsp<ret>'
+
+hook global -always BufOpenFifo '\*grep\*' %{ map -- global normal - ': grep-next-match<ret>' }
+hook global -always BufOpenFifo '\*make\*' %{ map -- global normal - ': make-next-error<ret>' }
+
+# Enable <tab>/<s-tab> for insert completion selection
+# ──────────────────────────────────────────────────────
+
+hook global InsertCompletionShow .* %{ map window insert <tab> <c-n>; map window insert <s-tab> <c-p> }
+hook global InsertCompletionHide .* %{ unmap window insert <tab> <c-n>; unmap window insert <s-tab> <c-p> }
+
+# Helper commands
+# ───────────────
+
+define-command find -menu -params 1 -shell-script-candidates %{ ag -g '' --ignore "$kak_opt_ignored_files" } %{ edit %arg{1} }
+
+define-command mkdir %{ nop %sh{ mkdir -p $(dirname $kak_buffile) } }
+
+define-command ide -params 0..1 %{
+    try %{ rename-session %arg{1} }
+
+    rename-client main
+    set-option global jumpclient main
+
+    new rename-client tools
+    set-option global toolsclient tools
+
+    new rename-client docs
+    set-option global docsclient docs
+}
+
+define-command delete-buffers-matching -params 1 %{
+    evaluate-commands -buffer * %{
+        evaluate-commands %sh{ case "$kak_buffile" in $1) echo "delete-buffer" ;; esac }
+    }
+}
+
+declare-option -hidden str swap_buffer_target
+define-command swap-buffer-with -override -params 1 -client-completion %{
+    set-option global swap_buffer_target %val{bufname}
+    edit -scratch # release current window for other client
+    evaluate-commands -client %arg{1} "
+        set-option global swap_buffer_target %%val{bufname}
+        buffer %opt{swap_buffer_target}
+    "
+    delete-buffer # delete the temporary scratch buffer
+    buffer %opt{swap_buffer_target}
+}
+
+define-command -params .. fifo %{ evaluate-commands %sh{
+     output=$(mktemp -d "${TMPDIR:-/tmp}"/kak-fifo.XXXXXXXX)/fifo
+     mkfifo ${output}
+     ( eval "$@" > ${output} 2>&1 & ) > /dev/null 2>&1 < /dev/null
+
+     printf %s\\n "evaluate-commands -try-client '$kak_opt_toolsclient' %{
+               edit! -fifo ${output} *fifo*
+               hook -always -once buffer BufCloseFifo .* %{ nop %sh{ rm -r $(dirname ${output}) } }
+           }"
+}}
+
+add-highlighter -override global/ wrap

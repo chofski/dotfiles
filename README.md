@@ -43,6 +43,8 @@ brew install argp-standalone
 brew install cunit
 brew install bioawk
 brew install youtube-dlc
+brew install kak-lsp/kak-lsp/kak-lsp
+brew install fzf
 ```
 
 At this stage it is also a good idea to install any custom fonts that are not available via Homebrew such a [MonoLisa](https://www.monolisa.dev).
@@ -68,6 +70,8 @@ conda install scikit-image
 pip install FlowCal
 conda install pandas
 conda install ipython
+pip install jedi
+pip install python-language-server
 ```
 
 For more complex setups, it is recommended to create a separate conda environment to ensure this one doesn't get screwed up.
