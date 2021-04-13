@@ -29,7 +29,16 @@ brew install --cask r
 brew install rust
 brew install --cask iterm2
 brew install --cask transmit
+brew install --cask omnigraffle
+brew install --cask zotero
+brew install --cask sublime-text
+brew install --cask zoom
+brew install --cask microsoft-teams
+brew install --cask slack
+brew install --cask visual-studio-code
+brew install --cask github
 brew install neovim --HEAD
+brew install kakoune
 brew install luarocks
 brew install tmux
 brew install htop
@@ -45,6 +54,11 @@ brew install bioawk
 brew install youtube-dlc
 brew install kak-lsp/kak-lsp/kak-lsp
 brew install fzf
+brew install fd
+brew install bat
+brew install broot
+brew install httpie
+brew install gnu-units
 ```
 
 At this stage it is also a good idea to install any custom fonts that are not available via Homebrew such a [MonoLisa](https://www.monolisa.dev).
@@ -106,3 +120,21 @@ Then to start `nvim` again to allow for all the plugins to set themselves up, be
 ```
 
 No errors should be thrown and NeoVim should now be all setup correctly.
+
+## 5. Kakoune
+
+To use plugins in kakoune the following command should be run:
+
+```
+mkdir -p $HOME/.config/kak/plugins
+git clone https://github.com/andreyorst/plug.kak.git $HOME/.config/kak/plugins/plug.kak
+```
+
+To finalise the setup of `kak` it is necessary to open the application and enter the following commands:
+
+```
+:plug-install
+:q
+```
+
+No errors should be thrown and Kakoune should now be all setup correctly.

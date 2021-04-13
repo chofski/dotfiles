@@ -8,29 +8,24 @@ evaluate-commands %sh{
     printf "%s\n" "source '$plugins/plug.kak/rc/plug.kak'"
 }
 plug "andreyorst/plug.kak" noload
-
 plug "andreyorst/fzf.kak"
-
 plug 'JJK96/kakoune-repl-send' %{
   # Suggested mapping
   map global normal <backspace> ': repl-send<ret>'
 }
-
 plug "raiguard/one.kak" theme
-
 plug "lePerdu/kakboard" %{
     hook global WinCreate .* %{ kakboard-enable }
 }
-
 plug 'delapouite/kakoune-palette'
 
 # Language Servers
 # ────────────────
 
 # Be sure to install kak-lsp using brew and to create config files in .config
-eval %sh{kak-lsp --kakoune -vvv -c $HOME/.config/kak-lsp/kak-lsp.toml -s $kak_session }
+eval %sh{kak-lsp --kakoune -vvv -c $HOME/.config/kak-lsp/kak-lsp.toml -s $kak_session}
 # --log $HOME/.config/kak-lsp/kak-lsp.log
-hook global WinSetOption filetype=(julia) %{
+hook global WinSetOption filetype=(julia|python) %{
     lsp-enable-window
 }
 

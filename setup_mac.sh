@@ -100,3 +100,7 @@ echo "source $HOME/.zsh/key-bindings.zsh" >> ~/.zshrc
 ###############################################################################
 # Add all my standard aliases for commands
 echo "source $HOME/.zsh/aliases.zsh" >> ~/.zshrc
+
+###############################################################################
+# Starship already shows conda status so remove
+conda config --set changeps1 False
