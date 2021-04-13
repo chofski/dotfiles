@@ -16,7 +16,7 @@ echo "export PATH=\$HOME/Development/bin:usr/local/bin:/Library/Frameworks/R.fra
 echo "export PYTHONPATH=\"\$HOME/Development/projects/pythonpath\"" >> ~/.zshrc
 echo "export EDITOR='mvim -f --nomru -c \"au VimLeave * !open -a Terminal\"'" >> ~/.zshrc
 echo "export JULIA_NUM_THREADS=$(expr $(sysctl -n hw.physicalcpu_max) - 2)" >> ~/.zshrc
-echo "export UOB_USERNAME=$1" >> ~/.zshrc
+echo "export UOB_USER=$1" >> ~/.zshrc
 echo "" >> ~/.zshrc
 
 ###############################################################################
