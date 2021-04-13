@@ -9,6 +9,8 @@ evaluate-commands %sh{
         git clone -q https://github.com/andreyorst/plug.kak.git "$plugins/plug.kak"
     printf "%s\n" "source '$plugins/plug.kak/rc/plug.kak'"
 }
+# This is a prereqe for all of alexherbo's plugins
+plug 'alexherbo2/prelude.kak'
 plug "andreyorst/plug.kak" noload
 plug "andreyorst/fzf.kak"
 plug 'JJK96/kakoune-repl-send' %{
@@ -20,7 +22,7 @@ plug "lePerdu/kakboard" %{
     hook global WinCreate .* %{ kakboard-enable }
 }
 plug 'delapouite/kakoune-palette'
-
+plug 'matthias-margush/tug'
 plug "andreyorst/kaktree" defer kaktree %{
     set-option global kaktree_double_click_duration '0.5'
     set-option global kaktree_indentation 1
@@ -36,13 +38,22 @@ plug "andreyorst/kaktree" defer kaktree %{
     }
     kaktree-enable
 }
+plug "andreyorst/powerline.kak" defer powerline %{
+    powerline-format global 'git bufname filetype mode_info line_column position'
+} config %{
+    powerline-start
+}
 
 # Language Servers
 # ────────────────
 
 # Be sure to install kak-lsp using brew and to create config files in .config
 eval %sh{kak-lsp --kakoune -vvv -c $HOME/.config/kak-lsp/kak-lsp.toml -s $kak_session}
-# --log $HOME/.config/kak-lsp/kak-lsp.log
+# For debugging: --log $HOME/.config/kak-lsp/kak-lsp.log
+# Turn off lsp when we exit kak
+hook global KakEnd .* lsp-exit
+# Tell lsp to insert spaces instead of tabs
+set-option global lsp_insert_spaces true
 
 # User preference
 # ───────────────
@@ -177,3 +188,55 @@ define-command find -menu -params 1 -shell-script-candidates %{ ag -g '' --ignor
 #            }"
 # }}
 
+
+# Powerline one-dark colorscheme
+# ──────────────────────────────
+
+hook global ModuleLoaded powerline %{ require-module powerline_one_dark }
+
+provide-module powerline_one_dark %§
+set-option -add global powerline_themes "one-dark"
+
+define-command -hidden powerline-theme-one-dark %{
+    declare-option -hidden str powerline_color00 "rgb:636d83" # fg: bufname
+    declare-option -hidden str powerline_color01 "rgb:373c47" # bg: position
+    declare-option -hidden str powerline_color02 "rgb:636d83" # fg: git
+    declare-option -hidden str powerline_color03 "rgb:373c47" # bg: bufname
+    declare-option -hidden str powerline_color04 "rgb:373c47" # bg: git
+    declare-option -hidden str powerline_color05 "rgb:636d83" # fg: position
+    declare-option -hidden str powerline_color06 "rgb:636d83" # fg: line-column
+    declare-option -hidden str powerline_color07 "rgb:636d83" # fg: mode-info
+    declare-option -hidden str powerline_color08 "rgb:373c47" # base background
+    declare-option -hidden str powerline_color09 "rgb:373c47" # bg: line-column
+    declare-option -hidden str powerline_color10 "rgb:636d83" # fg: filetype
+    declare-option -hidden str powerline_color11 "rgb:373c47" # bg: filetype
+    declare-option -hidden str powerline_color12 "rgb:373c47" # bg: client
+    declare-option -hidden str powerline_color13 "rgb:636d83" # fg: client
+    declare-option -hidden str powerline_color14 "rgb:636d83" # fg: session
+    declare-option -hidden str powerline_color15 "rgb:373c47" # bg: session
+    
+    declare-option -hidden str powerline_color16 "rgb:636d83" # unused
+    declare-option -hidden str powerline_color17 "rgb:636d83" # unused
+    declare-option -hidden str powerline_color18 "rgb:636d83" # unused
+    declare-option -hidden str powerline_color19 "rgb:636d83" # unused
+    declare-option -hidden str powerline_color20 "rgb:636d83" # unused
+    declare-option -hidden str powerline_color21 "rgb:636d83" # unused
+    declare-option -hidden str powerline_color22 "rgb:636d83" # unused
+    declare-option -hidden str powerline_color23 "rgb:636d83" # unused
+    declare-option -hidden str powerline_color24 "rgb:636d83" # unused
+    declare-option -hidden str powerline_color25 "rgb:636d83" # unused
+    declare-option -hidden str powerline_color26 "rgb:636d83" # unused
+    declare-option -hidden str powerline_color27 "rgb:636d83" # unused
+    declare-option -hidden str powerline_color28 "rgb:636d83" # unused
+    declare-option -hidden str powerline_color29 "rgb:636d83" # unused
+    declare-option -hidden str powerline_color30 "rgb:636d83" # unused
+    declare-option -hidden str powerline_color31 "rgb:636d83" # unused
+
+    declare-option -hidden str powerline_next_bg %opt{powerline_color08}
+    declare-option -hidden str powerline_base_bg %opt{powerline_color08}
+}
+
+§
+
+hook global ModuleLoaded powerline %{ powerline-theme one-dark }
+hook global ModuleLoaded powerline %{ powerline-separator triangle }
