@@ -4,16 +4,6 @@
 # Install command line tools if not done so already
 xcode-select --install
 
-#Install coc-julia, or register the server in coc-settings.json:
-#"languageserver": {
-#  "julia": {
-#    "command": "/usr/bin/julia",
-#    "args" : ["--startup-file=no", "--history-file=no", "-e",
-#    "using LanguageServer;\n       using Pkg;\n       import StaticLint;\n       import SymbolServer;\n       env_path = dirname(Pkg.Types.Context().env.project_file);\n       debug = false;\n       server = LanguageServer.LanguageServerInstance(stdin, stdout, debug, env_path, \"\");\n       server.runlinter = true;\n       run(server);" ],
-#    "filetypes": ["julia"]
-#  }
-#}
-
 echo "" >> ~/.zshrc
 echo "#########################################" >> ~/.zshrc
 echo "# AUTOMATICALLY GENERATED CONFIGURATION #" >> ~/.zshrc
