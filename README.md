@@ -61,9 +61,9 @@ brew install httpie
 brew install gnu-units
 ```
 
-At this stage it is also a good idea to install any custom fonts that are not available via Homebrew such a [MonoLisa](https://www.monolisa.dev).
+At this stage it is also a good idea to install any custom fonts that are not available via Homebrew such a [MonoLisa](https://www.monolisa.dev). However, FiraCode Nerd Font is a great choice to start with.
 
-For customisation of the shell and command line tools like `nvim` and `tmux` it is necessary to update iTerm2 to use the correct profile and import the [tomorrow-dark base16 256 colour scheme](https://github.com/chriskempson/base16-iterm2). Once done, the following script can be run to update all config files.
+For customisation of the shell and command line tools like `nvim` and `tmux` it is necessary to update iTerm2 to use the correct profile and import the [OneHalfDark colour scheme](https://github.com/sonph/onehalf). Once done, the following script can be run to update all config files.
 
 ```
 setup_mac.sh
