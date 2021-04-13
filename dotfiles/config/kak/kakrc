@@ -1,5 +1,7 @@
 
-# Setup plugins
+# Plugins
+# ───────
+
 evaluate-commands %sh{
     plugins="$kak_config/plugins"
     mkdir -p "$plugins"
@@ -11,7 +13,7 @@ plug "andreyorst/plug.kak" noload
 plug "andreyorst/fzf.kak"
 plug 'JJK96/kakoune-repl-send' %{
   # Suggested mapping
-  map global normal <backspace> ': repl-send<ret>'
+  # map global normal <backspace> ': repl-send<ret>'
 }
 plug "raiguard/one.kak" theme
 plug "lePerdu/kakboard" %{
@@ -19,15 +21,28 @@ plug "lePerdu/kakboard" %{
 }
 plug 'delapouite/kakoune-palette'
 
+plug "andreyorst/kaktree" defer kaktree %{
+    set-option global kaktree_double_click_duration '0.5'
+    set-option global kaktree_indentation 1
+    set-option global kaktree_dir_icon_open  '▾ 🗁 '
+    set-option global kaktree_dir_icon_close '▸ 🗀 '
+    set-option global kaktree_file_icon      '⠀⠀🖺'
+} config %{
+    hook global WinSetOption filetype=kaktree %{
+        remove-highlighter buffer/numbers
+        remove-highlighter buffer/matching
+        remove-highlighter buffer/wrap
+        remove-highlighter buffer/show-whitespaces
+    }
+    kaktree-enable
+}
+
 # Language Servers
 # ────────────────
 
 # Be sure to install kak-lsp using brew and to create config files in .config
 eval %sh{kak-lsp --kakoune -vvv -c $HOME/.config/kak-lsp/kak-lsp.toml -s $kak_session}
 # --log $HOME/.config/kak-lsp/kak-lsp.log
-hook global WinSetOption filetype=(julia|python) %{
-    lsp-enable-window
-}
 
 # User preference
 # ───────────────
@@ -37,9 +52,15 @@ set-option global grepcmd 'ag --column'
 set-option global ui_options terminal_status_on_top=true
 hook global ModuleLoaded clang %{ set-option global clang_options -std=c++17 }
 
+set-option global ui_options ncurses_set_title=true
+set-option global ui_options ncurses_assistant=none
+set global startup_info_version 99999999
+
 colorscheme one-dark
 
 add-highlighter global/ show-matching
+add-highlighter global/ wrap
+# add-highlighter -override global/ wrap
 
 hook global RegisterModified '/' %{ add-highlighter -override global/search regex "%reg{/}" 0:+u }
 
@@ -54,17 +75,14 @@ hook global BufNewFile .* %{ editorconfig-load }
 # Filetype specific hooks
 # ───────────────────────
 
-hook global WinSetOption filetype=(c|cpp) %{
-    clang-enable-autocomplete 
-    clang-enable-diagnostics
-    alias window lint clang-parse
-    alias window lint-next-error clang-diagnostics-next
+hook global WinSetOption filetype=(julia|python) %{
+    lsp-enable-window
 }
 
 hook global WinSetOption filetype=python %{
     jedi-enable-autocomplete
-    lint-enable
-    set-option global lintcmd 'flake8'
+    # lint-enable
+    # set-option global lintcmd 'flake8'
 }
 
 map -docstring "xml tag objet" global object t %{c<lt>([\w.]+)\b[^>]*?(?<lt>!/)>,<lt>/([\w.]+)\b[^>]*?(?<lt>!/)><ret>}
@@ -115,48 +133,47 @@ hook global InsertCompletionHide .* %{ unmap window insert <tab> <c-n>; unmap wi
 
 define-command find -menu -params 1 -shell-script-candidates %{ ag -g '' --ignore "$kak_opt_ignored_files" } %{ edit %arg{1} }
 
-define-command mkdir %{ nop %sh{ mkdir -p $(dirname $kak_buffile) } }
+# define-command mkdir %{ nop %sh{ mkdir -p $(dirname $kak_buffile) } }
 
-define-command ide -params 0..1 %{
-    try %{ rename-session %arg{1} }
+# define-command ide -params 0..1 %{
+#     try %{ rename-session %arg{1} }
 
-    rename-client main
-    set-option global jumpclient main
+#     rename-client main
+#     set-option global jumpclient main
 
-    new rename-client tools
-    set-option global toolsclient tools
+#     new rename-client tools
+#     set-option global toolsclient tools
 
-    new rename-client docs
-    set-option global docsclient docs
-}
+#     new rename-client docs
+#     set-option global docsclient docs
+# }
 
-define-command delete-buffers-matching -params 1 %{
-    evaluate-commands -buffer * %{
-        evaluate-commands %sh{ case "$kak_buffile" in $1) echo "delete-buffer" ;; esac }
-    }
-}
+# define-command delete-buffers-matching -params 1 %{
+#     evaluate-commands -buffer * %{
+#         evaluate-commands %sh{ case "$kak_buffile" in $1) echo "delete-buffer" ;; esac }
+#     }
+# }
 
-declare-option -hidden str swap_buffer_target
-define-command swap-buffer-with -override -params 1 -client-completion %{
-    set-option global swap_buffer_target %val{bufname}
-    edit -scratch # release current window for other client
-    evaluate-commands -client %arg{1} "
-        set-option global swap_buffer_target %%val{bufname}
-        buffer %opt{swap_buffer_target}
-    "
-    delete-buffer # delete the temporary scratch buffer
-    buffer %opt{swap_buffer_target}
-}
+# declare-option -hidden str swap_buffer_target
+# define-command swap-buffer-with -override -params 1 -client-completion %{
+#     set-option global swap_buffer_target %val{bufname}
+#     edit -scratch # release current window for other client
+#     evaluate-commands -client %arg{1} "
+#         set-option global swap_buffer_target %%val{bufname}
+#         buffer %opt{swap_buffer_target}
+#     "
+#     delete-buffer # delete the temporary scratch buffer
+#     buffer %opt{swap_buffer_target}
+# }
 
-define-command -params .. fifo %{ evaluate-commands %sh{
-     output=$(mktemp -d "${TMPDIR:-/tmp}"/kak-fifo.XXXXXXXX)/fifo
-     mkfifo ${output}
-     ( eval "$@" > ${output} 2>&1 & ) > /dev/null 2>&1 < /dev/null
+# define-command -params .. fifo %{ evaluate-commands %sh{
+#      output=$(mktemp -d "${TMPDIR:-/tmp}"/kak-fifo.XXXXXXXX)/fifo
+#      mkfifo ${output}
+#      ( eval "$@" > ${output} 2>&1 & ) > /dev/null 2>&1 < /dev/null
 
-     printf %s\\n "evaluate-commands -try-client '$kak_opt_toolsclient' %{
-               edit! -fifo ${output} *fifo*
-               hook -always -once buffer BufCloseFifo .* %{ nop %sh{ rm -r $(dirname ${output}) } }
-           }"
-}}
+#      printf %s\\n "evaluate-commands -try-client '$kak_opt_toolsclient' %{
+#                edit! -fifo ${output} *fifo*
+#                hook -always -once buffer BufCloseFifo .* %{ nop %sh{ rm -r $(dirname ${output}) } }
+#            }"
+# }}
 
-add-highlighter -override global/ wrap
