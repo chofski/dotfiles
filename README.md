@@ -37,6 +37,8 @@ brew install --cask microsoft-teams
 brew install --cask slack
 brew install --cask visual-studio-code
 brew install --cask github
+brew install --cask mactex
+brew install gnuplot
 brew install neovim --HEAD
 brew install kakoune
 brew install luarocks
@@ -59,6 +61,14 @@ brew install bat
 brew install broot
 brew install httpie
 brew install gnu-units
+brew install poppler automake
+brew install git ripgrep
+brew install coreutils fd
+brew tap railwaycat/emacsmacport
+brew install emacs-mac --with-modules
+ln -s /usr/local/opt/emacs-mac/Emacs.app /Applications/Emacs.app
+git clone https://github.com/hlissner/doom-emacs ~/.emacs.d
+~/.emacs.d/bin/doom install
 ```
 
 At this stage it is also a good idea to install any custom fonts that are not available via Homebrew such a [MonoLisa](https://www.monolisa.dev). However, FiraCode Nerd Font is a great choice to start with.
@@ -104,7 +114,11 @@ Pkg.add("DynamicalSystems")
 Pkg.add("Catalyst")
 ```
 
-## 5. NeoVim
+## 5. (Doom) Emacs
+
+Doom Emacs is setup as part of the environment and no further setup should be required.
+
+## 6. NeoVim
 
 To finalise the setup of `nvim` it is necessary to open the application and enter the following commands:
 
