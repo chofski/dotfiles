@@ -65,7 +65,7 @@ echo "" >> ~/.zshrc
 
 ###############################################################################
 # Clone repo to `~/.zsh/` directory
-cd ~/.zsh && git clone https://github.com/zdharma/fast-syntax-highlighting.git
+cd ~/.zsh && git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git
 # Enable 'fast-syntax-highlighting' plugin in ZSH
 echo "source $HOME/.zsh/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh" >> ~/.zshrc
 
