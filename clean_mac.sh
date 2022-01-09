@@ -2,8 +2,6 @@
 # Remove all config files
 rm -rf ~/.zsh/
 rm -rf ~/.vim/
-rm -rf ~/.config/base16-shell/
-rm -rf ~/.config/nvim/
 rm ~/.config/starship.toml
 rm ~/.gitconfig
 rm ~/.viminfo
