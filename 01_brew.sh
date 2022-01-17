@@ -1,6 +1,7 @@
 # Install command-line tools using Homebrew.
 
 xcode-select --install
+/usr/sbin/softwareupdate --install-rosetta --agree-to-license
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # Make sure we’re using the latest Homebrew.
@@ -126,6 +127,12 @@ brew install hdf5
 brew install argp-standalone
 brew install cunit
 brew install bioawk
+
+brew install exa
+brew install hyperfine
+brew install xsv
+brew install sd
+brew install tokei
 
 brew install youtube-dlc
 brew install fzf
