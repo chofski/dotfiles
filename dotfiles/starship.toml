@@ -65,6 +65,3 @@ show_always = true
 format = " [$symbol$environment](dimmed green) "
 ignore_base = false
 disabled = false
-
-
-
