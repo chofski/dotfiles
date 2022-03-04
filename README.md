@@ -81,6 +81,29 @@ setup_mac.sh
 
 If an error occurs or you would like to install a fresh configuration, a `clean_mac.sh` script is provided, which removes all customised configuration files.
 
+## Git
+
+```
+brew install git
+brew tap microsoft/git
+brew install --cask git-credential-manager-core
+git config
+git config --global gpg.program gpg
+gpg -K --keyid-format SHORT
+brew install pinentry-mac
+```
+
+Then, add following line to `~/.gnupg/gpg-agent.conf`
+```
+pinentry-program /usr/local/bin/pinentry-mac
+```
+and the following to `.zshrc`
+```
+export GPG_TTY=$(tty)
+```
+
+```gpg --generate-key```
+
 ## 3. Python environment
 
 There are a number of commonly used packages that are useful to have in the `base` conda environment to make standard analysis easier. The list currently stands at the following (run each separately to ensure no errors are raised).
