@@ -14,6 +14,13 @@ Once available it is then possible to install the [Homebrew](https://brew.sh) pa
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
+```
+ git config --global gpg.program gpg
+ git config --global user.name "Thomas Gorochowski"
+ gpg --generate-key
+ gpg -K --keyid-format SHORT
+```
+
 ## 2. Setting up the environment
 
 Once all the necessary compilers and package managers are available most software can be installed using the following commands (run each separately to ensure no errors are raised):

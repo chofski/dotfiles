@@ -1,9 +1,6 @@
 # setup_mac.sh
 # Expects to be given username for UoB server as first command line argument.
 
-# Install command line tools if not done so already
-xcode-select --install
-
 echo "" >> ~/.zshrc
 echo "#########################################" >> ~/.zshrc
 echo "# AUTOMATICALLY GENERATED CONFIGURATION #" >> ~/.zshrc
@@ -12,9 +9,9 @@ echo "" >> ~/.zshrc
 
 ###############################################################################
 # Standard environment variables
-echo "export PATH=\$HOME/Development/bin:usr/local/bin:/Library/Frameworks/R.framework/Resources/bin:\$PATH" >> ~/.zshrc
+echo "export PATH=/opt/homebrew/opt/coreutils/libexec/gnubin:\$HOME/Development/bin:usr/local/bin:/Library/Frameworks/R.framework/Resources/bin:\$PATH" >> ~/.zshrc
 echo "export PYTHONPATH=\"\$HOME/Development/projects/pythonpath\"" >> ~/.zshrc
-echo "export EDITOR='mvim -f --nomru -c \"au VimLeave * !open -a Terminal\"'" >> ~/.zshrc
+echo "export EDITOR='vim'" >> ~/.zshrc
 echo "export JULIA_NUM_THREADS=$(expr $(sysctl -n hw.physicalcpu_max) - 2)" >> ~/.zshrc
 echo "export UOB_USER=$1" >> ~/.zshrc
 echo "" >> ~/.zshrc

@@ -83,7 +83,7 @@ defaults write com.apple.screencapture disable-shadow -bool true
 
 # Enable subpixel font rendering on non-Apple LCDs
 # Reference: https://github.com/kevinSuttle/macOS-Defaults/issues/17#issuecomment-266633501
-defaults write NSGlobalDomain AppleFontSmoothing -int 1
+# defaults write NSGlobalDomain AppleFontSmoothing -int 1
 
 ###############################################################################
 # Finder                                                                      #
@@ -133,7 +133,8 @@ defaults write com.apple.finder FXPreferredViewStyle -string "Nclmv"
 defaults write com.apple.finder FXInfoPanesExpanded -dict \
 	General -bool true \
 	OpenWith -bool true \
-	Privileges -bool true
+	Privileges -bool false \
+	Preview -bool false
 
 ###############################################################################
 # Dock, Dashboard, and hot corners                                            #
